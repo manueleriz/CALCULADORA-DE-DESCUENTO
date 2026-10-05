@@ -111,7 +111,7 @@ input[type=file]{display:none}
         </tbody>
       </table>
       <div class="legend"><span><i></i>Celdas editables</span></div>
-      <p class="formula">MG UU = Precio lista − Costo UU. Bono crédito = Precio lista − Precio CC, y solo se suma al descuento en Financiamiento. MG1 = MG UU − TTL Dcto. MG3 = MG1 + CF + CS. Todos los % son sobre el precio de lista.</p>
+      <p class="formula">MG UU = Precio lista − Costo UU. Bono crédito = Precio lista − Precio CC, y solo se suma al descuento en Financiamiento. MG1 = MG UU − TTL Dcto. MG3 = MG1 + CF + CS + GP (Garantiplus). Todos los % son sobre el precio de lista.</p>
     </div>
 
     <div class="col">
@@ -149,6 +149,7 @@ input[type=file]{display:none}
         <tbody>
           <tr><th><label for="i_cf">CF</label></th><td class="input"><input id="i_cf" inputmode="numeric" placeholder="Comisión financiera $"></td></tr>
           <tr><th><label for="i_cs">CS</label></th><td class="input"><input id="i_cs" inputmode="numeric" placeholder="Comisión seguro $"></td></tr>
+          <tr class="new"><th><label for="i_gp">GP</label></th><td class="input"><input id="i_gp" inputmode="numeric" placeholder="Garantiplus $"></td></tr>
           <tr class="mg3"><th>MG3 %</th><td id="m3p"></td></tr>
           <tr class="mg3"><th>MG3 $</th><td id="m3"></td></tr>
         </tbody>
@@ -2760,7 +2761,7 @@ VWFG90;CHEVROLET;TRACKER;1.2T LTZ R 4X2 AT 5P;177;VI. 150-180;Media Alta;;86;B2B
   });
 
   // ---------- Cálculo ----------
-  const inputs = ['i_venta','i_traslado','i_transf','i_cf','i_cs'];
+  const inputs = ['i_venta','i_traslado','i_transf','i_cf','i_cs','i_gp'];
   const val = id => { const s=$(id).value.replace(/[^\d-]/g,''); const v=parseInt(s,10); return isFinite(v)?v:0; };
   function put(id, v, isPct){ const el=$(id); el.textContent = isPct ? pct(v) : money(v); el.classList.toggle('neg', v<0); }
 
@@ -2785,7 +2786,7 @@ VWFG90;CHEVROLET;TRACKER;1.2T LTZ R 4X2 AT 5P;177;VI. 150-180;Media Alta;;86;B2B
     const bono = cc>0 ? lista - cc : 0;
     const ttl = val('i_venta') + val('i_traslado') + val('i_transf') + (financ ? bono : 0);
     const mg1 = mguu - ttl;
-    const mg3 = mg1 + val('i_cf') + val('i_cs');
+    const mg3 = mg1 + val('i_cf') + val('i_cs') + val('i_gp');
     put('c_lista',lista); put('c_cc',cc); put('c_costo',costo);
     put('c_mguu',mguu); put('c_mguup',mguu/lista,true);
     $('c_bono').innerHTML = money(bono) + (financ ? '' : '<small>no aplica en contado</small>');
